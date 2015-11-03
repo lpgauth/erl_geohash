@@ -22,6 +22,8 @@
 -define(N, 500).
 -define(P, 1).
 
+-define(NOT_LOADED, not_loaded(?LINE)).
+
 -on_load(init/0).
 
 -spec init() -> ok.
@@ -43,10 +45,10 @@ priv_dir() ->
     end.
 
 circle_to_bounding_box(_Circle) ->
-    {error, geohash_nif_not_loaded}.
+    ?NOT_LOADED.
 
 radius_list_to_hashes(_RadiusList, _Iterations) ->
-    {error, geohash_nif_not_loaded}.
+    ?NOT_LOADED.
 
 radius_list_to_rectangles(RadiusList, Iterations) ->
     Hashes = radius_list_to_hashes(RadiusList, Iterations),
@@ -69,13 +71,13 @@ ejson_to_circle({EJsonCircle}) ->
     {float(Latitude), float(Longitude), float(Radius)}.
 
 build_index(_Lists, _Iterations) ->
-    {error, geohash_nif_not_loaded}.
+    ?NOT_LOADED.
 
 nif_async_start_build_index(_Lists, _Iterations) ->
-    {error, geohash_nif_not_loaded}.
+    ?NOT_LOADED.
 
 nif_async_finish_build_index(_Tid) ->
-    {error, geohash_nif_not_loaded}.
+    ?NOT_LOADED.
 
 async_build_index(Lists, Iterations) ->
     {Ref, Tid} = nif_async_start_build_index(Lists, Iterations),
@@ -89,25 +91,28 @@ async_build_index(Lists, Iterations) ->
     end.
 
 hashes_to_term(_Hashes) ->
-    {error, geohash_nif_not_loaded}.
+    ?NOT_LOADED.
 
 index_to_term(_Index) ->
-    {error, geohash_nif_not_loaded}.
+    ?NOT_LOADED.
 
 hashes_to_rectangles(_Hashes) ->
-    {error, geohash_nif_not_loaded}.
+    ?NOT_LOADED.
 
 point_in_hashes({Lat, Lon}, Hashes) ->
     point_in_hashes(Lat, Lon, Hashes).
 
 point_in_hashes(_Lat, _Lon, _Hashes) ->
-    {error, geohash_nif_not_loaded}.
+    ?NOT_LOADED.
 
 point_in_circle(_PointLat, _PointLon, _CircleLat, _CircleLon, _CircleRadius) ->
-    {error, geohash_nif_not_loaded}.
+    ?NOT_LOADED.
 
 point_index_values({Lat, Lon}, Index) ->
     point_index_values(Lat, Lon, Index).
 
 point_index_values(_Lat, _Lon, _Index) ->
-    {error, geohash_nif_not_loaded}.
+    ?NOT_LOADED.
+
+not_loaded(Line) ->
+    erlang:nif_error({not_loaded, [{module, ?MODULE}, {line, Line}]}).
